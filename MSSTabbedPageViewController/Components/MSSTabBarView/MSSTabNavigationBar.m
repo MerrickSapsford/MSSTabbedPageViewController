@@ -15,6 +15,11 @@ CGFloat const kMSSTabNavigationBarBottomPadding = 4.0f;
 
 @property (nonatomic, weak) MSSTabbedPageViewController *activeTabbedPageViewController;
 
+/**
+ custom default height for the tab bar
+ */
+@property (nonatomic, assign) IBInspectable CGFloat defaultHeight;
+
 @end
 
 @implementation MSSTabNavigationBar
@@ -49,7 +54,10 @@ CGFloat const kMSSTabNavigationBarBottomPadding = 4.0f;
 }
 
 - (CGFloat)heightIncreaseValue {
-    return MSSTabBarViewDefaultHeight + kMSSTabNavigationBarBottomPadding;
+	if (self.defaultHeight != 0.){
+		return self.defaultHeight;
+	}
+	return MSSTabBarViewDefaultHeight + kMSSTabNavigationBarBottomPadding;
 }
 
 - (BOOL)heightIncreaseRequired {
