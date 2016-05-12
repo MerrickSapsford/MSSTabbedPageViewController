@@ -41,6 +41,15 @@
     
     [self.tabBarView setTransitionStyle:self.style.transitionStyle];
     self.tabBarView.tabStyle = self.style.tabStyle;
+
+    /** Uncomment the below to add a custom image to the tab bar selection indicator */
+    /**
+     self.tabBarView.tabIndicatorImage = [UIImage imageNamed:@"arrow"];
+     self.tabBarView.selectionIndicatorHeight = 6;
+     self.tabBarView.selectionIndicatorImageWidth = 10;
+     self.tabBarView.selectionIndicatorImageStyle = MSSTabImageStyleAspectFill;
+     */
+    
     self.tabBarView.sizingStyle = self.style.sizingStyle;
 }
 
@@ -50,7 +59,7 @@
     [self performSegueWithIdentifier:@"showStylesSegue" sender:self];
 }
 
-#pragma mark - MSSPageViewControllerDataSource
+#pragma mark - Page View Controller
 
 - (NSArray *)viewControllersForPageViewController:(MSSPageViewController *)pageViewController {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
@@ -62,8 +71,6 @@
     }
     return viewControllers;
 }
-
-#pragma mark - MSSTabBarViewDataSource
 
 - (void)tabBarView:(MSSTabBarView *)tabBarView populateTab:(MSSTabBarCollectionViewCell *)tab atIndex:(NSInteger)index {
     NSString *imageName = [NSString stringWithFormat:@"tab%i.png", (int)(index + 1)];

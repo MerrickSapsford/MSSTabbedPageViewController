@@ -16,6 +16,11 @@ typedef NS_ENUM(NSInteger, MSSTabTransitionStyle) {
     MSSTabTransitionStyleSnap
 };
 
+typedef NS_ENUM(NSInteger, MSSTabImageStyle) {
+    MSSTabImageStyleAspectFill,
+    MSSTabImageStyleAspectFit
+};
+
 extern CGFloat const MSSTabBarViewDefaultHeight;
 
 @class MSSTabBarView;
@@ -127,6 +132,10 @@ __attribute__((deprecated("Use numberOfItemsForTabBarView and tabBarView:populat
  */
 @property (nonatomic, assign) CGFloat selectionIndicatorHeight UI_APPEARANCE_SELECTOR;
 /**
+ The width of the selection indicator image.
+ */
+@property (nonatomic, assign) CGFloat selectionIndicatorImageWidth UI_APPEARANCE_SELECTOR;
+/**
  The inset for the selection indicator from the bottom of the tab bar.
  */
 @property (nonatomic, assign) CGFloat selectionIndicatorInset UI_APPEARANCE_SELECTOR;
@@ -159,6 +168,10 @@ __attribute__((deprecated("Use numberOfItemsForTabBarView and tabBarView:populat
  */
 @property (nonatomic, strong, nullable) UIColor *tabIndicatorColor UI_APPEARANCE_SELECTOR;
 /**
+ The image used in the tab selection indicator.
+ */
+@property (nonatomic, strong, nullable) UIImage *tabIndicatorImage UI_APPEARANCE_SELECTOR;
+/**
  The text color of the tabs.
  */
 @property (nonatomic, strong, nullable) UIColor *tabTextColor UI_APPEARANCE_SELECTOR;
@@ -174,7 +187,10 @@ __attribute__((deprecated("Use numberOfItemsForTabBarView and tabBarView:populat
  The transition style for the selection indicator to use during transitioning.
  */
 @property (nonatomic, assign) MSSTabTransitionStyle selectionIndicatorTransitionStyle UI_APPEARANCE_SELECTOR;
-
+/**
+ The tabIndicatorImage's parent's view's (i.e., UIImageView) contentMode
+ */
+@property (nonatomic, assign) MSSTabImageStyle selectionIndicatorImageStyle UI_APPEARANCE_SELECTOR;
 /**
  Initialize a tab bar with a specified height.
  
