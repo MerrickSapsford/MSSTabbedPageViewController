@@ -18,6 +18,7 @@ NSString *  const MSSTabBarViewCellIdentifier = @"tabCell";
 // defaults
 CGFloat     const MSSTabBarViewDefaultHeight = 44.0f;
 CGFloat     const MSSTabBarViewDefaultTabIndicatorHeight = 2.0f;
+CGFloat     const MSSTabBarViewDefaultTabIndicatorImageWidth = 10.0f;
 CGFloat     const MSSTabBarViewDefaultTabPadding = 8.0f;
 CGFloat     const MSSTabBarViewDefaultTabUnselectedAlpha = 0.3f;
 CGFloat     const MSSTabBarViewDefaultHorizontalContentInset = 8.0f;
@@ -40,6 +41,7 @@ NSString *  const MSSTabTextFont = @"tabTextFont";
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UIView *selectionIndicatorView;
+@property (nonatomic, strong) UIImageView *selectionIndicatorImageView;
 @property (nonatomic, weak) MSSTabBarCollectionViewCell *selectedCell;
 @property (nonatomic, strong) NSIndexPath *selectedIndexPath;
 
@@ -287,6 +289,26 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     self.selectionIndicatorView.backgroundColor = tabIndicatorColor;
 }
 
+- (void)setTabIndicatorImage:(UIImage *)tabIndicatorImage {
+    _tabIndicatorImage = tabIndicatorImage;
+
+    if (!self.selectionIndicatorImageView) {
+        // Add an image view to the tab indicator view
+        self.selectionIndicatorImageView = [UIImageView new];
+        self.selectionIndicatorImageView.contentMode = UIViewContentModeScaleAspectFill;
+        [self.selectionIndicatorView addSubview:self.selectionIndicatorImageView];
+    }
+
+    if (_tabIndicatorImage) {
+        // set the selectionIndicatorView to clear, so you only see the image
+        self.selectionIndicatorView.backgroundColor = [UIColor clearColor];
+        // add a UIImage inside the selectionIndicatorView
+        self.selectionIndicatorImageView.image = self.tabIndicatorImage;
+    } else {
+        self.selectionIndicatorView.backgroundColor = self.tabIndicatorColor;
+    }
+}
+
 - (void)setTabTextColor:(UIColor *)tabTextColor {
     _tabTextColor = tabTextColor;
     [self reloadData];
@@ -312,6 +334,28 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
         frame.size = CGSizeMake(frame.size.width, selectionIndicatorHeight);
         self.selectionIndicatorView.frame = frame;
     }
+}
+
+- (void)setSelectionIndicatorImageWidth:(CGFloat)selectionIndicatorImageWidth {
+    _selectionIndicatorImageWidth = selectionIndicatorImageWidth;
+    [self updateSelectionIndicatorImageView];
+}
+
+- (void)setSelectionIndicatorImageStyle:(MSSTabImageStyle)selectionIndicatorImageStyle {
+    _selectionIndicatorImageStyle = selectionIndicatorImageStyle;
+
+    UIViewContentMode contentMode;
+    switch (selectionIndicatorImageStyle) {
+        case MSSTabImageStyleAspectFill:
+            contentMode = UIViewContentModeScaleAspectFill;
+            break;
+
+        case MSSTabImageStyleAspectFit:
+            contentMode = UIViewContentModeScaleAspectFit;
+            break;
+    }
+
+    self.selectionIndicatorImageView.contentMode = contentMode;
 }
 
 - (void)setSelectionIndicatorInset:(CGFloat)selectionIndicatorInset {
@@ -584,7 +628,18 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
                                                    self.bounds.size.height - self.selectionIndicatorInset - self.selectionIndicatorHeight,
                                                    width,
                                                    self.selectionIndicatorHeight);
+
+    [self updateSelectionIndicatorImageView];
+
     [self updateCollectionViewScrollOffset];
+}
+
+- (void)updateSelectionIndicatorImageView {
+    // re-center the image to the selectionIndicatorView
+    if (self.selectionIndicatorImageView) {
+        self.selectionIndicatorImageView.frame = CGRectMake(0, 0, self.selectionIndicatorImageWidth, self.selectionIndicatorView.frame.size.height);
+        self.selectionIndicatorImageView.center = CGPointMake(CGRectGetMidX(self.selectionIndicatorView.bounds), CGRectGetMidY(self.selectionIndicatorView.bounds));
+    }
 }
 
 - (void)updateCollectionViewScrollOffset {
